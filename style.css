@@ -1,0 +1,373 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+}
+
+.title {
+    text-align: center;
+    color: white;
+    font-size: clamp(2em, 8vw, 3em);
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    animation: fadeIn 0.5s ease-in;
+}
+
+.screen {
+    animation: fadeIn 0.3s ease-in;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.card, .game-card {
+    background: white;
+    border-radius: 20px;
+    padding: clamp(20px, 5vw, 40px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: slideUp 0.4s ease-out;
+}
+
+.card h2, .game-card h2 {
+    text-align: center;
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: clamp(1.5em, 5vw, 2em);
+}
+
+.btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: clamp(1em, 3vw, 1.1em);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 10px 0;
+    text-transform: uppercase;
+    touch-action: manipulation;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:active {
+    transform: scale(0.98);
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.btn-success:active {
+    transform: scale(0.98);
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+.btn-click {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    font-size: clamp(1.5em, 6vw, 2em);
+    padding: clamp(20px, 5vw, 30px);
+    animation: clickPulse 0.5s ease-in-out infinite;
+}
+
+.btn-click:active {
+    transform: scale(0.95);
+}
+
+.upload-section {
+    margin: 20px 0;
+}
+
+.upload-label {
+    display: block;
+    width: 100%;
+    padding: clamp(20px, 5vw, 30px);
+    border: 3px dashed #667eea;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #667eea;
+    font-size: clamp(1em, 3vw, 1.2em);
+    font-weight: bold;
+}
+
+.upload-label:active {
+    background: #f0f4ff;
+}
+
+.upload-label:hover {
+    background: #f0f4ff;
+    border-color: #764ba2;
+}
+
+.upload-label input {
+    display: none;
+}
+
+.file-name {
+    text-align: center;
+    margin-top: 10px;
+    color: #28a745;
+    font-weight: bold;
+    font-size: clamp(0.9em, 2.5vw, 1em);
+}
+
+#qrSection {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+#qrcode {
+    display: inline-block;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    margin: 15px 0;
+}
+
+#qrcode img, #qrcode canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+.room-id {
+    font-size: clamp(1em, 3vw, 1.2em);
+    font-weight: bold;
+    color: #667eea;
+    margin-top: 10px;
+    word-break: break-all;
+}
+
+.players-section {
+    margin: 20px 0;
+}
+
+.players-section h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: clamp(1em, 3vw, 1.2em);
+}
+
+#playerList {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    min-height: 50px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.player-item {
+    background: white;
+    padding: 10px 15px;
+    margin: 5px 0;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    font-weight: 500;
+    font-size: clamp(0.9em, 2.5vw, 1em);
+}
+
+.input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: clamp(1em, 3vw, 1.1em);
+    margin: 10px 0;
+    transition: border-color 0.3s ease;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.audio-visualizer {
+    position: relative;
+    width: clamp(150px, 40vw, 200px);
+    height: clamp(150px, 40vw, 200px);
+    margin: 30px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pulse-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 4px solid #667eea;
+    border-radius: 50%;
+    animation: pulse 2s ease-out infinite;
+}
+
+.music-icon {
+    font-size: clamp(3em, 10vw, 5em);
+    animation: bounce 1s ease-in-out infinite;
+}
+
+#gameStatus {
+    font-size: clamp(1.2em, 4vw, 1.5em);
+    color: #333;
+}
+
+#resultSection {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#resultText {
+    font-size: clamp(1em, 3vw, 1.5em);
+    margin: 20px 0;
+    color: #667eea;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes clickPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 5px;
+    }
+    
+    .title {
+        margin-bottom: 15px;
+    }
+    
+    .card, .game-card {
+        border-radius: 15px;
+    }
+    
+    .btn {
+        padding: 12px;
+        margin: 8px 0;
+    }
+    
+    #qrSection {
+        padding: 10px;
+    }
+    
+    #qrcode {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 400px) {
+    .audio-visualizer {
+        margin: 20px auto;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+    .title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+    
+    .audio-visualizer {
+        width: 120px;
+        height: 120px;
+        margin: 15px auto;
+    }
+}
