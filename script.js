@@ -71,8 +71,7 @@ const game = {
         this.peer = new Peer(this.roomId || undefined, {
             config: {
                 iceServers: [
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:global.stun.twilio.com:3478' }
+                    { urls: 'stun:stun.l.google.com:19302' }
                 ]
             }
         });
@@ -99,9 +98,7 @@ const game = {
         });
 
         this.peer.on('connection', (conn) => {
-            conn.on('open', () => {
-                this.handleConnection(conn);
-            });
+            this.handleConnection(conn);
         });
 
         this.peer.on('error', (err) => {
@@ -139,14 +136,13 @@ const game = {
         this.peer = new Peer(undefined, {
             config: {
                 iceServers: [
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:global.stun.twilio.com:3478' }
+                    { urls: 'stun:stun.l.google.com:19302' }
                 ]
             }
         });
         
         this.peer.on('open', () => {
-            const conn = this.peer.connect(roomId, { reliable: true });
+            const conn = this.peer.connect(roomId);
             
             conn.on('open', () => {
                 conn.send({ type: 'join', name: playerName });
@@ -183,7 +179,6 @@ const game = {
 
         conn.on('error', (err) => {
             console.error('Connection error:', err);
-            this.connections = this.connections.filter(c => c !== conn);
         });
     },
 
@@ -298,13 +293,9 @@ const game = {
         reader.onload = (e) => {
             const audioData = e.target.result;
             
-            this.connections.forEach((conn, index) => {
-                setTimeout(() => {
-                    conn.send({
-                        type: 'preload',
-                        audioData: audioData
-                    });
-                }, index * 100);
+            this.broadcast({
+                type: 'preload',
+                audioData: audioData
             });
 
             this.preloadAudio(audioData);
