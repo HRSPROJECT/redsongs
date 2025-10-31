@@ -68,7 +68,14 @@ const game = {
 
     createHost() {
         this.isHost = true;
-        this.peer = new Peer(this.roomId || undefined);
+        this.peer = new Peer(this.roomId || undefined, {
+            config: {
+                iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:global.stun.twilio.com:3478' }
+                ]
+            }
+        });
         
         this.peer.on('open', (id) => {
             this.roomId = id;
@@ -92,7 +99,9 @@ const game = {
         });
 
         this.peer.on('connection', (conn) => {
-            this.handleConnection(conn);
+            conn.on('open', () => {
+                this.handleConnection(conn);
+            });
         });
 
         this.peer.on('error', (err) => {
@@ -127,10 +136,17 @@ const game = {
         this.hostName = playerName;
         this.saveState();
 
-        this.peer = new Peer();
+        this.peer = new Peer(undefined, {
+            config: {
+                iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:global.stun.twilio.com:3478' }
+                ]
+            }
+        });
         
         this.peer.on('open', () => {
-            const conn = this.peer.connect(roomId);
+            const conn = this.peer.connect(roomId, { reliable: true });
             
             conn.on('open', () => {
                 conn.send({ type: 'join', name: playerName });
@@ -167,13 +183,18 @@ const game = {
 
         conn.on('error', (err) => {
             console.error('Connection error:', err);
+            this.connections = this.connections.filter(c => c !== conn);
         });
     },
 
     broadcast(data) {
         this.connections.forEach(conn => {
             if (conn.open) {
-                conn.send(data);
+                try {
+                    conn.send(data);
+                } catch (err) {
+                    console.error('Send error:', err);
+                }
             }
         });
     },
@@ -270,16 +291,20 @@ const game = {
         }
 
         document.getElementById('startBtn').disabled = true;
-        document.getElementById('startBtn').textContent = 'Loading Audio...';
+        document.getElementById('startBtn').textContent = 'Sending Audio...';
         this.audioLoaded = { host: false };
 
         const reader = new FileReader();
         reader.onload = (e) => {
             const audioData = e.target.result;
             
-            this.broadcast({
-                type: 'preload',
-                audioData: audioData
+            this.connections.forEach((conn, index) => {
+                setTimeout(() => {
+                    conn.send({
+                        type: 'preload',
+                        audioData: audioData
+                    });
+                }, index * 100);
             });
 
             this.preloadAudio(audioData);
@@ -330,7 +355,7 @@ const game = {
             const minStop = 3;
             const maxStop = Math.min(duration - 2, 30);
             const stopTime = Math.random() * (maxStop - minStop) + minStop;
-            const startTimestamp = Date.now() + 2000;
+            const startTimestamp = Date.now() + 1500;
 
             this.broadcast({
                 type: 'start',
